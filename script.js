@@ -20,9 +20,9 @@ fetch('blender-open-data.json')
       } else {
         results.forEach(result => {
           const resultItem = document.createElement('p');
-          resultItem.textContent = result + ": " + data[result];
+          resultItem.innerHTML = result + ": " + data[result];
           resultItem.addEventListener('click', () => {
-            copyToClipboard(data[result]);
+            copyToClipboard(resultItem.outerHTML);
             showCopyNotification();
           });
           searchResults.appendChild(resultItem);
@@ -30,9 +30,9 @@ fetch('blender-open-data.json')
       }
     }
 
-    function copyToClipboard(text) {
+    function copyToClipboard(html) {
       const textarea = document.createElement('textarea');
-      textarea.value = text;
+      textarea.innerHTML = html;
       document.body.appendChild(textarea);
       textarea.select();
       document.execCommand('copy');
