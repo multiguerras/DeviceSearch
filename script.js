@@ -4,12 +4,21 @@ fetch('blender-open-data.json')
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.getElementById('searchResults');
     const copyNotification = document.getElementById('copyNotification');
+    const darkModeToggle = document.getElementById('darkModeToggle');
 
     searchInput.addEventListener('input', () => {
       const searchTerm = searchInput.value.toLowerCase();
       const filteredData = Object.keys(data).filter(key => key.toLowerCase().includes(searchTerm));
 
       displayResults(filteredData);
+    });
+
+    darkModeToggle.addEventListener('change', () => {
+      if (darkModeToggle.checked) {
+        enableDarkMode();
+      } else {
+        disableDarkMode();
+      }
     });
 
     function displayResults(results) {
@@ -44,6 +53,14 @@ fetch('blender-open-data.json')
       setTimeout(() => {
         copyNotification.style.display = 'none';
       }, 2000);
+    }
+
+    function enableDarkMode() {
+      document.body.classList.add('dark-mode');
+    }
+
+    function disableDarkMode() {
+      document.body.classList.remove('dark-mode');
     }
   })
   .catch(error => {
