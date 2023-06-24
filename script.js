@@ -3,6 +3,7 @@ fetch('blender-open-data.json')
   .then(data => {
     const searchInput = document.getElementById('searchInput');
     const searchResults = document.getElementById('searchResults');
+    const copyNotification = document.getElementById('copyNotification');
 
     searchInput.addEventListener('input', () => {
       const searchTerm = searchInput.value.toLowerCase();
@@ -15,16 +16,36 @@ fetch('blender-open-data.json')
       searchResults.innerHTML = '';
 
       if (results.length === 0) {
-        searchResults.innerHTML = 'No se encontraron resultados.';
+        searchResults.innerHTML = 'No hay resultados. Completa el benchmark de <a href="https://opendata.blender.org/">https://opendata.blender.org/</a>';
       } else {
         results.forEach(result => {
           const resultItem = document.createElement('p');
           resultItem.textContent = result + ": " + data[result];
+          resultItem.addEventListener('click', () => {
+            copyToClipboard(data[result]);
+            showCopyNotification();
+          });
           searchResults.appendChild(resultItem);
         });
       }
     }
+
+    function copyToClipboard(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+    }
+
+    function showCopyNotification() {
+      copyNotification.style.display = 'block';
+      setTimeout(() => {
+        copyNotification.style.display = 'none';
+      }, 2000);
+    }
   })
   .catch(error => {
-    console.log('Ocurrió un error al cargar el archivo JSON:', error);
+    console.log('Error al cargar el JSON:', error);
   });
